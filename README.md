@@ -17,6 +17,8 @@ Also to do:
 
 * enforce usage of current mod name for the formspec name string
 * move forms to a local variable
+* make the form size dynamic depending on number of elements added
+* make button placement automatic
 
 ## Example
 
