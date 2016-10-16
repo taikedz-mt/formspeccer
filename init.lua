@@ -1,12 +1,13 @@
 formspeccer = {}
+local forms = {}
 
 formspeccer.newform = function(self,formname,formsize)
 	-- TODO - check that the mod name matches current mod
-	if self[formname] ~= nil then -- shim -- need to require a proper itemstring
+	if forms[formname] ~= nil then -- shim -- need to require a proper itemstring
 		minetest.log("error","Form "..formname.." already exists!!")
 		return -- how to cleanly indicate error and prevent loading?
 	end
-	self[formname] = 'size['..formsize..']'
+	forms[formname] = 'size['..formsize..']'
 	return formname
 end
 
@@ -21,7 +22,7 @@ formspeccer.add_field = function(self,form,def)
 
 	fieldstring = fieldstring .. ']'
 
-	self[form] = self[form]..fieldstring
+	forms[form] = forms[form]..fieldstring
 end
 
 formspeccer.add_button = function(self,form,def)
@@ -31,17 +32,28 @@ formspeccer.add_button = function(self,form,def)
 	bstring = bstring .. def.name .. ';'
 	bstring = bstring .. def.label 
 	bstring = bstring .. ']'
-	self[form] = self[form] .. bstring
+	forms[form] = forms[form] .. bstring
+end
+
+formspeccer.add_list = function(self,form,def)
+	local lstring = 'list['
+	lstring = lstring .. def.location .. ';'
+	lstring = lstring .. def.name .. ';'
+	lstring = lstring .. def.x .. ',' .. def.y .. ';'
+	lstring = lstring .. def.w .. ',' .. def.h 
+	if def.startindex then
+		lstring = lstring .. ';' .. def.start_index
+	end
 end
 
 formspeccer.to_string = function(self,formname)
-	return self[formname]
+	return forms[formname]
 end
 
 formspeccer.show = function(self,player,formname)
-	minetest.show_formspec(player:get_player_name(),formname,self[formname])
+	minetest.show_formspec(player:get_player_name(),formname,forms[formname])
 end
 
 formspeccer.clear = function(self,formname)
-	self[formname] = nil
+	forms[formname] = nil
 end
