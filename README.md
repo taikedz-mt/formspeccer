@@ -1,10 +1,10 @@
 # Minetest FormSpeccer
 
-A lightweight mini-API for creating and managing formspecs without having to contend with its /specialist/ syntax....
-
 (C) Tai Kedzierski
 
 License: LGPLv3
+
+A lightweight mini-API for creating and managing formspecs without having to contend with its... _specialised_ syntax....
 
 Currently supports
 
@@ -16,7 +16,6 @@ More will be added as I progress
 Also to do:
 
 * enforce usage of current mod name for the formspec name string
-* move forms to a local variable
 * make the form size dynamic depending on number of elements added
 * make button placement automatic
 
@@ -48,4 +47,4 @@ Add a dependency to formspeccer, then use the `formspeccer` object to manage for
 
 	minetest.show_formspec(player:get_player_name(),
 		formspeccer:to_string(formname) -- returns the formspec raw string
-		)
+	)
