@@ -2,6 +2,10 @@
 
 A lightweight mini-API for creating and managing formspecs without having to contend with its /specialist/ syntax....
 
+(C) Tai Kedzierski
+
+License: LGPLv3
+
 Currently supports
 
 * `field`
