@@ -18,7 +18,9 @@ More will be added as I progress
 
 ## Example
 
-Add a dependency to formspeccer, then use the `formspeccer` object to manage formspecs
+Add a dependency to formspeccer, then use the `formspeccer` object to manage formspecs.
+
+Note that coordinates are expressed not in pixels but in a pieces of a grid. For brevity, and to distinguish from actual coordinates, I chose to simply supply them as comma-separated string vlues.
 
 	local formname = "mymod:myform"
 
@@ -32,6 +34,8 @@ Add a dependency to formspeccer, then use the `formspeccer` object to manage for
 		{
 			name="send",
 			label="Send!",
+			xy="2,3",
+			wh="1,1",
 		},
 		true -- optional , makes it an exit button
 	)
