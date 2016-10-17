@@ -6,15 +6,11 @@ License: LGPLv3
 
 A lightweight mini-API for creating and managing formspecs without having to contend with its... _specialised_ syntax....
 
-Currently supports
+Currently most of the items documented in [formspec](http://dev.minetest.net/formspec) on the minetest dev wiki has been implemented, except for `listcolors`
 
-* `field`
-* `button`, `button_exit`, `image_button`, `image_button_exit`
-* `image`
-* `list`
+There is still more to implement as per the [Minetest Lua API](https://github.com/minetest/minetest/blob/master/doc/lua_api.txt#L1653) (no support yet for those aded items)
 
-More will be added as I progress
-
+A full API documentation is to follow.
 
 ## Example
 
