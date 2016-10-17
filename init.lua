@@ -50,6 +50,18 @@ formspeccer.newform = function(self,formname,formsize,prefs)
 	return formname
 end
 
+formspeccer.add_label = function(self,form,def,vertical)
+	local fieldstring = 'label['
+	if vertical then fieldstring = 'vertlabel[' end
+
+	fieldstring = fieldstring .. def.xy .. ';'
+
+	fieldstring = fieldstring .. def.label .. ';'
+	fieldstring = fieldstring .. ']'
+
+	forms[form] = forms[form]..fieldstring
+end
+
 formspeccer.add_field = function(self,form,def)
 	local fieldstring = 'field['
 	if def.x and def.y and def.w and def.h then
@@ -99,6 +111,33 @@ formspeccer.add_list = function(self,form,def)
 	if def.startindex then
 		lstring = lstring .. ';' .. def.start_index
 	end
+	lstring = lsting .. ']'
+	forms[form] = forms[form] .. lstring
+end
+
+formspeccer.add_choice_list = function(self,form,def,multichoice,transparent)
+	local lstring = 'dropdown['
+	if multichoice then lstring = 'textlist[' end
+
+	lstring = lstring .. def.xy .. ';'
+	lstring = lstring .. def.wh .. ';'
+	lstring = lstring .. def.name .. ';'
+
+	lstring = lstring .. def.choices[1]
+	for i=2,#def.choices do
+		lstring = lstring .. ',' .. def.choices[i]
+	end
+	if def.index then
+		lstring = lstring .. ';'..def.index
+
+		if transparent and multichoice then
+			lstring = lstring .. ';true'
+		end
+	else
+		lstring = lstring .. ';1'
+	end
+	lstring = lstring .. ']'
+	forms[form] = forms[form] .. lstring
 end
 
 formspeccer.to_string = function(self,formname)
