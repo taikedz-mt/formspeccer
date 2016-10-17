@@ -9,15 +9,12 @@ A lightweight mini-API for creating and managing formspecs without having to con
 Currently supports
 
 * `field`
-* `button`
+* `button`, `button_exit`, `image_button`, `image_button_exit`
+* `image`
+* `list`
 
 More will be added as I progress
 
-Also to do:
-
-* enforce usage of current mod name for the formspec name string
-* make the form size dynamic depending on number of elements added
-* make button placement automatic
 
 ## Example
 
@@ -31,10 +28,13 @@ Add a dependency to formspeccer, then use the `formspeccer` object to manage for
 		label="Your name",
 		value="Sam", -- optional pre-populated value for the form
 	})
-	formspeccer:add_button({
-		name="send",
-		label="Send!",
-	})
+	formspeccer:add_button(
+		{
+			name="send",
+			label="Send!",
+		},
+		true -- optional , makes it an exit button
+	)
 
 	-- just show the form to a player
 	formspeccer:show(player,"mymod:myform)
