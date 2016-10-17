@@ -2,8 +2,7 @@ formspeccer = {}
 local forms = {}
 
 formspeccer.newform = function(self,formname,formsize)
-	-- TODO - check that the mod name matches current mod
-	if forms[formname] ~= nil then -- shim -- need to require a proper itemstring
+	if forms[formname] ~= nil then
 		minetest.log("error","Form "..formname.." already exists!!")
 		return -- how to cleanly indicate error and prevent loading?
 	end
@@ -13,6 +12,14 @@ end
 
 formspeccer.add_field = function(self,form,def)
 	local fieldstring = 'field['
+	if def.x and def.y and def.w and def.h then
+		fieldstring = fieldstring .. def.x .. ',' .. def.y .. ';'
+		fieldstring = fieldstring .. def.w .. ',' .. def.h .. ';'
+	elseif forms[form]:find('].') then
+		minetest.log("warning","There should only be one non-positioned field in a form.")
+		minetest.log("warning","Got: "..forms[form])
+	end
+
 	fieldstring = fieldstring .. def.name .. ';'
 	fieldstring = fieldstring .. def.label .. ';'
 	local content = def.value
@@ -25,10 +32,18 @@ formspeccer.add_field = function(self,form,def)
 	forms[form] = forms[form]..fieldstring
 end
 
-formspeccer.add_button = function(self,form,def)
-	local bstring = 'button['
+formspeccer.add_button = function(self,form,def,exit)
+	
+	local bstring = 'button'
+	if def.texture then bstring = 'image_button' end
+	if exit then bstring = bstring .. '_exit' end
+	bstring = bstring ..'['
+
 	bstring = bstring .. def.x .. ',' .. def.y .. ';'
 	bstring = bstring .. def.w .. ',' .. def.h .. ';'
+	if def.texture then
+		bstring = bstring .. def.texture .. ';'
+	end
 	bstring = bstring .. def.name .. ';'
 	bstring = bstring .. def.label 
 	bstring = bstring .. ']'
