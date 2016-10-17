@@ -62,9 +62,12 @@ formspeccer.add_label = function(self,form,def,vertical)
 	forms[form] = forms[form]..fieldstring
 end
 
-formspeccer.add_field = function(self,form,def)
+formspeccer.add_field = function(self,form,def,password)
 	local fieldstring = 'field['
-	if def.x and def.y and def.w and def.h then
+
+	if def.xy and def.wh then
+		if password then fieldstring = 'pwdfield[' end
+
 		fieldstring = fieldstring .. def.xy .. ';'
 		fieldstring = fieldstring .. def.wh .. ';'
 	elseif forms[form]:find('].') then
@@ -73,11 +76,14 @@ formspeccer.add_field = function(self,form,def)
 	end
 
 	fieldstring = fieldstring .. def.name .. ';'
-	fieldstring = fieldstring .. def.label .. ';'
+	fieldstring = fieldstring .. def.label
+
 	local content = def.value
 	if content == nil then content = '' end
 
-	fieldstring = fieldstring .. content .. ';'
+	if not password then
+		fieldstring = fieldstring .. ';'.. content .. ';'
+	end
 
 	fieldstring = fieldstring .. ']'
 
