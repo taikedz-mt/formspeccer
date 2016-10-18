@@ -50,6 +50,21 @@ formspeccer.newform = function(self,formname,formsize,prefs)
 	return formname
 end
 
+formspeccer.add_textarea = function(self,form,def)
+	-- textarea[X,Y;W,H;name;label;default]
+	local fstring = 'textarea['
+	fstring = fstring .. def.xy .. ';'
+	fstring = fstring .. def.wh .. ';'
+	fstring = fstring .. def.name .. ';'
+	fstring = fstring .. def.label
+
+	if def.value ~= nil then
+		fstring = fstring .. ';'.. minetest.formspec_escape(tostring(def.value))
+	end
+	fstring = fstring .. ']'
+	forms[form] = forms[form]..fstring
+end
+
 formspeccer.add_label = function(self,form,def,vertical)
 	local fieldstring = 'label['
 	if vertical then fieldstring = 'vertlabel[' end
