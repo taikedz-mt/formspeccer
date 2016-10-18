@@ -82,7 +82,7 @@ formspeccer.add_field = function(self,form,def,password)
 	if content == nil then content = '' end
 
 	if not password then
-		fieldstring = fieldstring .. ';'.. content .. ';'
+		fieldstring = fieldstring .. ';'.. content 
 	end
 
 	fieldstring = fieldstring .. ']'
