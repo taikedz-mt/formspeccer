@@ -10,13 +10,13 @@ Currently most of the items documented in [formspec](http://dev.minetest.net/for
 
 There is still more to implement as per the [Minetest Lua API](https://github.com/minetest/minetest/blob/master/doc/lua_api.txt#L1653) (no support yet for those aded items)
 
-A full API documentation is to follow.
-
 ## Example
 
 Add a dependency to formspeccer, then use the `formspeccer` object to manage formspecs.
 
 Note that coordinates are expressed not in pixels but in a pieces of a grid. For brevity, and to distinguish from actual coordinates, I chose to simply supply them as comma-separated string vlues.
+
+See the API documentation for details.
 
 	local formname = "mymod:myform"
 

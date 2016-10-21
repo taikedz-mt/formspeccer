@@ -1,0 +1,231 @@
+FormSpeccer API
+
+v 0.3 (alpha)
+
+This API is still under development, please ensure you are aware of this.
+
+--------
+
+The FormSpeccer API is a helper tool to allow you to create formspecs
+using the more familiar "tabular" notation used throughout minetest, 
+rather than the more esoteric native formspec language.
+
+	1/ Form Spec Coordinates System
+
+Formspecs do not use a pixel-based coordinate system, because differing
+client window sizes would need to have a corresponding matching set of
+corrdinates programmed in advance.
+
+Instead, formspecs rely on an inventory grid coordinate system. A
+coordinate, or size, of "1,1" would define the space of a single
+inventory grid square.
+
+Width and heights in this API therefore follow on from this notation --
+a pair of width-height coordinates are denoted by a `wh` property;
+and a pair of (x,y) coordinates are denoted by a `xy` property.
+
+	2/ Form
+
+	2.a / Basic manipulation
+
+Create a new form using
+
+	formspeccer:newform ( FORMNAME , SIZE , PREFS )
+
+The form name should be a unique name for the form you want to register.
+PREFS is an optional table (see 2.b)
+
+For example:
+
+	local formname = formspeccer:newform("spawnermod:spawnerform" , "10,7" )
+
+The function returns the name of the form (in its current implementation),
+in this instance, "spawnermod:spawnerform". Future implementations may
+instead return an object representing the form instance.
+
+You cannot immediately  call "newform" on an existing form name if that
+form is being managed by FormSpeccer.
+
+Instead, you would need to clear it first, before re-defining it:
+
+	formspeccer:clear("spawnermod:spawnerform")
+	formspeccer:newform("spawnermod:spawnerform" , "10,7" )
+
+Any mod can clear any form by name.
+
+	2.b / Additional features
+
+In the PREFS argument you can provide a table with additional
+parameters to customize the form with.
+
+	PREFS = {
+		bgcolor = COLORNAME
+	}
+
+COLORNAME can by a HTML-compatible hex string (for exampple "#ccff00"),
+or a colour name.
+
+Supported colour names are: red, green, blue, yellow, cyan, magenta,
+white, black, lightgrey, mediumgrey, darkgrey.
+
+	PREFS = {
+		background = {
+			xy = OFFSET,
+			WH = SIZE,
+			texture = TEXTURENAME,
+			auto_clip = BOOL_AUTOCLIP,
+		}
+	}
+
+A background image can be set instead of the default. It gets its image
+from all available textures.
+
+If AUTOCLIP_BOOL is set to true, the image will be limited to displaying
+within the confines of the form area, otherwise it will bleed outwards.
+Default is true.
+
+	3/ Formspec Elements
+
+* All elements should be defined with a `name`, `xy` and `wh`
+	definition.
+* All elements except the label element expect a `name` definition.
+* Only the field element can be defined without `xy` or `wh`, but this
+	is considered bad practice.
+
+The `xy` definition places the form element at the corresponding offset.
+Note that if you place an element at xy = "1,1", you will see it actually
+displayed slightly offset.
+
+The `wh` definition determines what width and heigh the field part of the
+form element will take.
+
+The `name` definition provides the field with a name, to be referenced
+during `receive_fiuelds` callbacks.
+
+The `label` definition provides the field with a displayed label. This
+definition is optional, but recommended.
+
+	3.a / Button
+
+formspeccer:add_button(formname,
+	{
+	xy = POSITION,
+	wh = SIZE,
+	name = ELEMENT_NAME,
+	label = ELEMENT_LABEL,
+	texture = IMAGE,
+	},
+	BOOL_QUIT
+)
+
+If BOOL_QUIT is set to true, then clicking the button closes the form.
+Default is false.
+
+If IMAGE specifies a valid texture file, that image is used on the
+button. Default is for there to be no image.
+
+	3.b / Field
+
+formspeccer:add_field(formname,
+	{
+	xy = POSITION,
+	wh = SIZE,
+	name = ELEMENT_NAME,
+	label = ELEMENT_LABEL,
+	},
+	BOOL_PASS
+)
+
+If BOOL_PASS is set to true, then the input field will be obfuscated
+with asterisks. Default is false.
+
+	3.c / Label
+
+formspeccer:add_label(formname,
+	{
+	xy = POSITION,
+	wh = SIZE,
+	label = ELEMENT_LABEL,
+	},
+	BOOL_VERTICAL
+)
+
+If BOOL_VERTICAL is set to true, the etxt will be displayed with each
+letter under the other, in vertical-style writing. Default is false.
+
+	3.d / List
+
+formspeccer.add_choice_list(formname,
+	{
+	xy = POSITION,
+	wh = SIZE,
+	name = ELEMENT_NAME,
+	label = ELEMENT_LABEL,
+	choices = ARRAY_OF_CHOICES,
+	},
+	BOOL_MULTI,
+	BOOL_TRANSPARENT
+)
+
+ARRAY_OF_CHOICES is an anonymous table of selectable items, for example,
+
+	{ "choice1", "choice 2", "another thing to choose" }
+
+If BOOL_MULTI is set to true, then the player can make multiple choices.
+Default is false.
+
+If BOOL_TRANSPARENT is set tot true, then the background is made
+transparent. Default is false.
+
+	3.e / Inventory
+
+formspeccer:add_label(formname,
+	{
+	xy = POSITION,
+	wh = SIZE,
+	name = ELEMENT_NAME,
+	location = INVENTORY_LOCATION,
+	start_index = IDX,
+	},
+)
+
+INVENTORY_LOCATION is the name of the location or detatched inventory to use
+(needs elaboration).
+
+IDX is the index at which to start (needs elaboration)
+
+
+
+============================================
+
+Still to document:
+
+	form.lua:formspeccer.to_string = function(self,formname)
+	form.lua:formspeccer.show = function(self,player,formname)
+
+	list.lua:formspeccer.add_inventory = function(self,form,def)
+	textarea.lua:formspeccer.add_textarea = function(self,form,def)
+
+Stil to implement:
+	listcolors
+		* http://dev.minetest.net/formspec#listcolors
+		* a formspec preference
+	container / container_end
+	listring / listring_end
+	tooltip
+	image
+	item_image_button
+	tabheader
+	box
+	checkbox
+	scrollbar
+	table
+	tableoptions
+	tablecolumns
+	inventorylocations
+		* flesh out the definition
+		* https://github.com/minetest/minetest/blob/master/doc/lua_api.txt#L1754
+	colostring
+	colorspec
+		* my custom colour lookup may be unnecessary
+		* https://github.com/minetest/minetest/blob/master/doc/lua_api.txt#L1754
